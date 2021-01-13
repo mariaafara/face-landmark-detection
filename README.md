@@ -50,3 +50,13 @@ Then we need to build a custom Data Generator that will load mini-batches, perfo
 
 Part 1.1 and 1.2 are present in this [Notebook](https://github.com/mariaafara/face-landmark-detection/blob/main/data_preparation.ipynb).
 
+In Part 1.3 we have trained a model for each feature except the nose_tip since it doesn't have missing value.
+
+In Part 1.4 we have use the trained models to fill the missing values and prepare the main dataset inorder to use it for training the main prediction model that predicts all features.
+
+Part 1.4 is present in this [Notebook](https://github.com/mariaafara/face-landmark-detection/blob/main/label_missing_values.ipynb).
+
+Here are some examples of the final dataset:
+
+<img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/main/images/final_examples.png">
+
