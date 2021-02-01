@@ -1,4 +1,4 @@
-from tensorflow.keras import Model, layers, Input
+from tensorflow.keras import Model, layers
 from tensorflow.keras.layers import Dense, Flatten, Dropout
 from tensorflow.keras.activations import relu
 from tensorflow.keras.applications.vgg16 import VGG16, preprocess_input as preprocess_input_vgg16
@@ -13,7 +13,6 @@ class BaseModel(layers.Layer):
 
     def __init__(self, image_shape, name, trainable=False):
         super(BaseModel, self).__init__(name=name)
-
         if name == "EfficientNetB0":
             self.base_model = EfficientNetB0(include_top=False, input_shape=image_shape)
             self.preprocess_input = preprocess_input_efficientnetB0
@@ -26,6 +25,7 @@ class BaseModel(layers.Layer):
         elif name == "VGG19":
             self.base_model = VGG19(include_top=False, input_shape=image_shape)
             self.preprocess_input = preprocess_input_vgg19
+
         self.base_model.trainable = trainable
 
         # set the first 15 layers (up to the last conv block)
@@ -35,9 +35,16 @@ class BaseModel(layers.Layer):
 
     def call(self, inputs):
         x = self.preprocess_input(inputs)
-        # x = self.input_(inputs)
         base_model_output = self.base_model(x)
         return base_model_output
+
+    # def get_config(self):
+    #     config = super(BaseModel, self).get_config()
+    #     config.update({
+    #         "preprocess_input": self.preprocess_input,
+    #         "base_model": self.base_model,
+    #     })
+    #     return config
 
 
 class TopModel(layers.Layer):
@@ -62,6 +69,7 @@ class MyModel(Model):
     def __init__(self, image_shape, base_model_name, features_dim,
                  trainable=False, intermediate_dim=64, dropout_rate=0.4):
         super(MyModel, self).__init__()
+        self.image_shape = image_shape
         self.base_model = BaseModel(image_shape, name=base_model_name, trainable=trainable)
         self.flatten = Flatten()
         self.top_model = TopModel(features_dim=features_dim,

@@ -17,18 +17,23 @@ def callbacks_functions(model_path, patience):
     """define callbacks functions, save the best model with lower validation loss"""
     early_stopping = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=patience)
 
-    check_pointer = ModelCheckpoint(filepath=model_path, verbose=1, save_best_only=True)
+    check_pointer = ModelCheckpoint(filepath=model_path, verbose=1, save_best_only=True, save_weights_only=True)
 
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=patience, verbose=1, mode='min')
 
     return [check_pointer, early_stopping, reduce_lr]
 
 
-def fit_model(model, epochs, train_generator, val_generator, model_path, patience=8):
+def compile_model(model):
     model.compile(loss=euclidean_distance_loss,
                   optimizer=Adam(learning_rate=1e-4),
                   )
+    return model
 
+
+def fit_model(model, epochs, train_generator, val_generator, model_path, patience=8):
+
+    model = compile_model(model)
     history = model.fit(train_generator,
                         validation_data=val_generator,
                         epochs=epochs,

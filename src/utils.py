@@ -9,6 +9,10 @@ def save_to_pickle(object, file_path):
     pkl.dump(object, open(file_path, "wb"))
 
 
+def load_from_pickle(file_path):
+    return pkl.load(open(file_path, "rb"))
+
+
 def split_data(df, test_size=0.2):
     df_train, df_test = train_test_split(df, test_size=test_size, random_state=None)
     # print(df.shape, df_train.shape, df_test.shape)
@@ -21,6 +25,14 @@ def create_scaler(df):
     xy = df.values
     scaler.fit_transform(xy)
     return scaler
+
+
+def pre_process_image(image, rgb_channels, normalize_image):
+    if rgb_channels:
+        image = np.repeat(image, 3, -1)
+    if normalize_image:
+        image = image / 255
+    return image
 
 
 def visualize_random_indexed_image(df, i=-1, image_path=None):
@@ -68,6 +80,6 @@ def visualize_image(image, coordinates, image_path=None, predicted_coordinates=N
         plt.plot(coordinates[j], coordinates[j + 1], 'X', color='blue')
         if predicted_coordinates is not None:
             plt.plot(predicted_coordinates[j], predicted_coordinates[j + 1], 'X', color='red')
-            plt.legend({'actual', 'predicted'})
+            plt.legend({'predicted', 'actual'})
     if image_path is not None:
         plt.savefig(image_path)
