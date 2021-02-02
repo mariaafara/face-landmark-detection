@@ -1,5 +1,7 @@
 import numpy as np
 import random
+import cv2
+from math import sin, cos, pi
 import tensorflow as tf
 
 
@@ -23,7 +25,12 @@ class DataGenerator(tf.keras.utils.Sequence):
             augment: Allow augmentation.
             normalize_image: Option to normalize the image.
             normalize_coordinates: Option to normalize the coordinates using MinMax scaler
-            scaler: Normalize the coordinates using this scalers.
+            scaler: Normalize the coordinates using this scaler. It can only be provided if augment boolean is set to
+            True.
+            rotation_angles: A list with different rotation angles. Can only be provided if augment boolean is set to
+            True.
+            shift_pixels: A list of different shift pixels. Can only be provided if augment boolean is set to
+            True.
 
         left_right_dic: To keep track on which pairs of landmarks to be swapped, we introduce a dictionary recording
         the original and new landmark's index.
@@ -39,6 +46,7 @@ class DataGenerator(tf.keras.utils.Sequence):
         self.normalize_coordinates = normalize_coordinates
         self.scaler = scaler
         self.feature_columns = df.columns.tolist()[:-1]
+        self.nb_features = len(self.feature_columns)
         self.left_right_dic = {'right_eye_center_x': 'left_eye_center_x',
                                'right_eye_center_y': 'left_eye_center_y',
                                'right_eye_inner_corner_x': 'left_eye_inner_corner_x',
@@ -83,7 +91,7 @@ class DataGenerator(tf.keras.utils.Sequence):
 
         batched_feature_coordinates = df_batch.iloc[:, :-1]
         if self.normalize_coordinates:
-            batched_feature_coordinates= self.scaler.transform(batched_feature_coordinates.values)
+            batched_feature_coordinates = self.scaler.transform(batched_feature_coordinates.values)
 
         batched_feature_coordinates = batched_feature_coordinates.astype(np.float32)
 
@@ -118,7 +126,7 @@ class DataGenerator(tf.keras.utils.Sequence):
                 - Multiply pixel values by random value between 1 and 1.5 to increase the brightness of the image.
                 - Clip the value between 0 and 255.
             """
-            image = np.clip(random.uniform(1, 1.5) * image, 0.0, 255.0)
+            image = np.clip(random.uniform(1, 1.4) * image, 0.0, 255.0)
             return image
 
         def decrease_brightness(image):
@@ -127,8 +135,48 @@ class DataGenerator(tf.keras.utils.Sequence):
                 - Multiply pixel values by random values between 0 and 0.1 to decrease the brightness of the image.
                 - Clip the value between 0 and 255
             """
-            image = np.clip(random.uniform(0, 0.1) * image, 0.0, 255.0)
+            image = np.clip(random.uniform(0.2, 0.7) * image, 0.0, 255.0)
             return image
+
+        def shift(row):
+            keypoint = row.iloc[:self.nb_features]
+            image = row["Image"].astype(np.uint8)
+            shift = np.random.randint(0, 20)
+            (shift_x, shift_y) = random.choices([(-shift, -shift), (-shift, shift), (shift, -shift), (shift, shift)])[0]
+            matrix = np.float32([[1, 0, shift_x], [0, 1, shift_y]])
+            shifted_image = cv2.warpAffine(image, matrix, (96, 96), flags=cv2.INTER_CUBIC)
+            shifted_keypoint = np.array(
+                [(point + shift_x) if idx % 2 == 0 else (point + shift_y) for idx, point in enumerate(keypoint)])
+            if np.all(0.0 < shifted_keypoint) and np.all(shifted_keypoint < 96.0):
+                # shifted_image = shifted_image.reshape(96, 96, 1)
+                shifted_keypoint = np.clip(shifted_keypoint, 0.0, 96.0)
+                row.iloc[:self.nb_features] = shifted_keypoint
+                row["Image"] = shifted_image
+                return row
+            return row
+
+        def rotate(row):
+            keypoint = row.iloc[:self.nb_features]
+            image = row["Image"].astype(np.uint8)
+            angle_rand = np.random.randint(0, 20)
+            angle = random.choices([angle_rand, -angle_rand])[0]
+            middle = 96 / 2  # the middle value of the image dimension
+            matrix = cv2.getRotationMatrix2D((middle, middle), angle, 1.0)
+            angle_rad = -angle * pi / 180.  # Obtain angle in radians from angle in degrees
+            # (notice negative sign for change in clockwise vs anti-clockwise directions from conventional rotation to
+            # cv2's image rotation)
+            rotated_image = cv2.warpAffine(image, matrix, (96, 96), flags=cv2.INTER_CUBIC)
+            rotated_keypoint = keypoint - middle  # Subtract the middle value of the image dimension
+            for idx in range(0, len(rotated_keypoint), 2):
+                # https://in.mathworks.com/matlabcentral/answers/93554-how-can-i-rotate-a-set-of-points-in-a-plane-by-a-certain-angle-about-an-arbitrary-point
+                rotated_keypoint[idx] = rotated_keypoint[idx] * cos(angle_rad) - rotated_keypoint[idx + 1] * sin(
+                    angle_rad)
+                rotated_keypoint[idx + 1] = rotated_keypoint[idx] * sin(angle_rad) + rotated_keypoint[
+                    idx + 1] * cos(angle_rad)
+            rotated_keypoint += middle  # Add the earlier subtracted value
+            row.iloc[:self.nb_features] = rotated_keypoint
+            row["Image"] = rotated_image
+            return row
 
         def augment(row):
             # If we have more than one feature allow flipping.
@@ -142,14 +190,27 @@ class DataGenerator(tf.keras.utils.Sequence):
             if row["augment_dec_b"]:
                 row["Image"] = decrease_brightness(row["Image"])
 
+            # Rotation augmentation
+            if row["augment_rotate"]:
+                row = rotate(row)
+
+            # shift horizontally or vertically by a random shift pixel value
+            if row["augment_shift"]:
+                row = shift(row)
+
             return row
 
         # Generate random boolean for augmentation types.
+        bools = [True, False]
+        weights = [0.6, 0.4]
         df["augment_flip"] = [random.getrandbits(1) for i in range(len(df))]
         df["augment_inc_b"] = [random.getrandbits(1) for i in range(len(df))]
         df["augment_dec_b"] = [random.getrandbits(1) for i in range(len(df))]
+        df["augment_shift"] = [random.choices(bools, weights, k=1)[0] for i in range(len(df))]
+        df["augment_rotate"] = [random.choices(bools, weights, k=1)[0] for i in range(len(df))]
+
         df = df.apply(augment, axis=1)
-        df.drop(['augment_flip', 'augment_inc_b', 'augment_dec_b'], axis=1, inplace=True)
+
+        df.drop(['augment_flip', 'augment_inc_b', 'augment_dec_b', "augment_shift", "augment_rotate"],
+                axis=1, inplace=True)
         return df
-
-
