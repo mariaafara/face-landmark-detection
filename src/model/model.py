@@ -1,5 +1,5 @@
 from tensorflow.keras import Model, layers
-from tensorflow.keras.layers import Dense, Flatten, Dropout
+from tensorflow.keras.layers import Dense, Flatten, Dropout, GlobalAveragePooling2D, BatchNormalization
 from tensorflow.keras.activations import relu
 from tensorflow.keras.applications.vgg16 import VGG16, preprocess_input as preprocess_input_vgg16
 from tensorflow.keras.applications.vgg19 import VGG19, preprocess_input as preprocess_input_vgg19
@@ -38,26 +38,21 @@ class BaseModel(layers.Layer):
         base_model_output = self.base_model(x)
         return base_model_output
 
-    # def get_config(self):
-    #     config = super(BaseModel, self).get_config()
-    #     config.update({
-    #         "preprocess_input": self.preprocess_input,
-    #         "base_model": self.base_model,
-    #     })
-    #     return config
-
-
 class TopModel(layers.Layer):
     """Fully connected layers"""
 
     def __init__(self, features_dim, intermediate_dim=64, dropout_rate=0.4):
         super(TopModel, self).__init__()
-        self.dense1 = Dense(intermediate_dim, activation=relu)
+        # self.dense1 = Dense(intermediate_dim, activation=relu)
         self.dropout = Dropout(rate=dropout_rate)
         self.dense2 = Dense(features_dim, activation=relu)
+        self.global_average_pooling = GlobalAveragePooling2D()
+        self.batch_normalization = BatchNormalization()
 
     def call(self, inputs):
-        x = self.dense1(inputs)
+        x = self.global_average_pooling(inputs)
+        x = self.batch_normalization(x)
+        # x = self.dense1(inputs)
         x = self.dropout(x)
         x = self.dense2(x)
         return x
@@ -71,15 +66,15 @@ class MyModel(Model):
         super(MyModel, self).__init__()
         self.image_shape = image_shape
         self.base_model = BaseModel(image_shape, name=base_model_name, trainable=trainable)
-        self.flatten = Flatten()
+        # self.flatten = Flatten()
         self.top_model = TopModel(features_dim=features_dim,
                                   intermediate_dim=intermediate_dim,
                                   dropout_rate=dropout_rate)
-
         self.build(self.base_model.base_model.input_shape)
+
 
     def call(self, inputs):
         x = self.base_model(inputs)
-        x = self.flatten(x)
+        # x = self.flatten(x)
         x = self.top_model(x)
         return x
