@@ -10,7 +10,8 @@ AUGMENT_TRAIN = getenv("AUGMENT_TRAIN", "true") == "true"
 AUGMENT_VAL = getenv("AUGMENT_VAL", "false") == "true"
 RGB_CHANNELS = getenv("RGB_CHANNELS", "true") == "true"
 EPOCHS = int(getenv("EPOCHS", 2))
-PATIENCE = int(getenv("PATIENCE", 1))
+PATIENCE_EARLY_STOPPING = int(getenv("PATIENCE", 8))
+PATIENCE_LR = int(getenv("PATIENCE", 4))
 MODEL_PATH = getenv("MODEL_PATH", "models/prediction_model/model")  # .h5
 WEIGHT_PATH = getenv("WEIGHT_PATH", "models/prediction_model/model_weights.ckpt")
 IMAGE_SHAPE = tuple([int(i) for i in getenv("IMAGE_SHAPE", "96,96,3").split(",")])  #  ex: 96,96,3
