@@ -109,7 +109,7 @@ def visualize_random_predicted_images(my_model, batch, scaler, feature_name, ima
           plt.plot(predicted_y[k], predicted_y[k + 1], 'X', color='red',label="predicted")
 
     plt.legend()
-    fig.suptitle("Trained {} feature model predictions on a mix of augmented and normal images from validation set".format(feature_name.upper()), fontweight='bold', fontsize=30)
+    fig.suptitle("Trained {} feature model predictions on a mix of augmented and normal images from Test set".format(feature_name.upper()), fontweight='bold', fontsize=30)
     fig.tight_layout()
     fig.subplots_adjust(top=0.95)
     fig.savefig(image_path, bbox_inches="tight")
