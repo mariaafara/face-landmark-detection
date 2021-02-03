@@ -64,74 +64,72 @@ Here are some examples for each feature after training its own model:
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/left_eye_center_augmented_results.png">
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/left_eye_center_normal_results.png">
 
----
+******
 
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eye_center_augmented_results.png">
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eye_center_normal_results.png">
 
----
+******
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/left_eye_inner_corner_augmented_results.png">
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/left_eye_inner_corner_normal_results.png">
 
----
+******
 
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eye_inner_corner_augmented_results.png">
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eye_inner_normal_results.png">
 
----
+******
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/left_eye_outer_corner_augmented_results.png">
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/left_eye_outer_corner_normal_results.png">
 
----
+******
 
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eye_outer_corner_augmented_results.png">
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eye_outer_corner_normal_results.png">
 
----
+******
 
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/left_eyebrow_inner_end_augmented_results.png">
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/left_eyebrow_inner_end_normal_results.png">
 
----
+******
 
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eyebrow_inner_end_augmented_results.png">
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eyebrow_inner_end_normal_results.png">
 
----
+******
 
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/left_eyebrow_outer_end_augmented_results.png">
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/left_eyebrow_outer_end_normal_results.png">
 
----
+******
 
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eyebrow_outer_end_augmented_results.png">
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eyebrow_outer_end_normal_results.png">
 
----
+******
 
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/mouth_center_bottom_lip_augmented_results.png">
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/mouth_center_bottom_lip_normal_results.png">
 
----
+******
 
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/mouth_center_top_lip_augmented_results.png">
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/mouth_center_top_lip_normal_results.png">
 
----
+******
 
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/mouth_left_corner_augmented_results.png">
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/mouth_left_corner_normal_results.png">
 
----
+******
 
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/mouth_right_corner_augmented_results.png">
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/mouth_right_corner_normal_results.png">
 
----
+******
 
 Here's an example of all features after being filled:
-
----
 
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part1/images/final_examples2.png">
 
