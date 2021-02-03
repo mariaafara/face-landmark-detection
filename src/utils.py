@@ -27,6 +27,15 @@ def create_scaler(df):
     return scaler
 
 
+def pre_process_images(df, rgb_channels, normalize_image):
+    images = np.vstack(df["Image"].values).reshape(-1, 96, 96, 1).astype(np.float32)
+    if rgb_channels:
+        images = np.repeat(images,3,-1)
+    if normalize_image == True:
+        images = images/255
+    return images
+
+
 def pre_process_image(image, rgb_channels, normalize_image):
     if rgb_channels:
         image = np.repeat(image, 3, -1)
@@ -56,7 +65,7 @@ def visualize_random_indexed_image(df, i=-1, image_path=None):
         plt.savefig(image_path)
 
 
-def visualize_random_indexed_images(df, image_path=None):
+def visualize_random_indexed_images(df, image_path):
     plt.figure(figsize=(30, 30))
     for i in range(12):
         plt.subplot(6, 6, i + 1)
@@ -67,7 +76,7 @@ def visualize_random_indexed_images(df, image_path=None):
         plt.imshow(df['Image'][j], cmap='gray')
         nbr_cols = df.columns.tolist()[:-1]
         for k in range(0, len(nbr_cols), 2):
-            plt.plot(df.loc[j][k], df.loc[j][k + 1], 'rx')
+            plt.plot(df.loc[j][k], df.loc[j][k + 1], 'X', color="blue")
     plt.savefig(image_path, bbox_inches="tight")
     plt.show()
 
@@ -77,14 +86,14 @@ def visualize_image(image, coordinates, image_path=None, predicted_coordinates=N
     plt.imshow(image, cmap='gray')
     f = len(coordinates)
     for j in range(0, f, 2):
-        plt.plot(coordinates[j], coordinates[j + 1], 'X', color='blue', label="actual")
+        plt.plot(coordinates[j], coordinates[j + 1], 'X', color='blue')
         if predicted_coordinates is not None:
-            plt.plot(predicted_coordinates[j], predicted_coordinates[j + 1], 'X', color='red', label="predicted")
-    plt.legend()
+            plt.plot(predicted_coordinates[j], predicted_coordinates[j + 1], 'X', color='red')
+    plt.legend({'actual', 'predicted'})
     if image_path is not None:
         plt.savefig(image_path)
 
-def visualize_random_predicted_images(my_model, batch, scaler, feature_name, image_path, type_="augmented"):
+def visualize_random_predicted_images(my_model, batch, scaler, feature_name=None, image_path=None, type_="augmented"):
 
     fig = plt.figure(figsize=(30, 30))
     indxs = []
@@ -110,13 +119,15 @@ def visualize_random_predicted_images(my_model, batch, scaler, feature_name, ima
 
         nbr_cols = len(actual_y)
         for k in range(0, nbr_cols, 2):
-            plt.plot(actual_y[k], actual_y[k + 1], 'X', color='blue', label="actual")
+            plt.plot(actual_y[k], actual_y[k + 1], 'X', color='blue')
         for k in range(0, nbr_cols, 2):
-          plt.plot(predicted_y[k], predicted_y[k + 1], 'X', color='red',label="predicted")
+            plt.plot(predicted_y[k], predicted_y[k + 1], 'X', color='red')
 
-    plt.legend()
-    fig.suptitle("Trained {} feature model predictions on {} images from Test set".format(feature_name.upper(),type_), fontweight='bold', fontsize=30)
+    plt.legend({"actual", "predicted"})
+    if feature_name:
+        fig.suptitle("Trained {} feature model predictions on {} images from Test set".format(feature_name.upper(),type_), fontweight='bold', fontsize=30)
     fig.tight_layout()
     fig.subplots_adjust(top=0.95)
-    fig.savefig(image_path, bbox_inches="tight")
+    if image_path:
+        fig.savefig(image_path, bbox_inches="tight")
     plt.show()
