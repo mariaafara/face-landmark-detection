@@ -84,10 +84,10 @@ def visualize_image(image, coordinates, image_path=None, predicted_coordinates=N
     if image_path is not None:
         plt.savefig(image_path)
 
-def visualize_random_predicted_images(my_model, batch, scaler, feature_name, image_path):
+def visualize_random_predicted_images(my_model, batch, scaler, feature_name, image_path, type_="augmented"):
 
     fig = plt.figure(figsize=(30, 30))
-
+    indxs = []
     for i in range(12):
         plt.subplot(6, 6, i + 1)
         plt.xticks([])
@@ -95,6 +95,12 @@ def visualize_random_predicted_images(my_model, batch, scaler, feature_name, ima
         plt.grid(False)
 
         j= np.random.randint(0,len(batch[0]))
+
+        while j in indxs:
+          j= np.random.randint(0,len(batch[0]))
+
+        indxs.append(j)
+
         plt.imshow(batch[0][j:j+1].reshape(96, 96, 1)[:,:,0], cmap='gray')
 
         actual_y= batch[1][j:j+1][0]
@@ -109,7 +115,7 @@ def visualize_random_predicted_images(my_model, batch, scaler, feature_name, ima
           plt.plot(predicted_y[k], predicted_y[k + 1], 'X', color='red',label="predicted")
 
     plt.legend()
-    fig.suptitle("Trained {} feature model predictions on a mix of augmented and normal images from Test set".format(feature_name.upper()), fontweight='bold', fontsize=30)
+    fig.suptitle("Trained {} feature model predictions on {} images from Test set".format(feature_name.upper(),type_), fontweight='bold', fontsize=30)
     fig.tight_layout()
     fig.subplots_adjust(top=0.95)
     fig.savefig(image_path, bbox_inches="tight")
