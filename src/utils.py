@@ -77,9 +77,40 @@ def visualize_image(image, coordinates, image_path=None, predicted_coordinates=N
     plt.imshow(image, cmap='gray')
     f = len(coordinates)
     for j in range(0, f, 2):
-        plt.plot(coordinates[j], coordinates[j + 1], 'X', color='blue')
+        plt.plot(coordinates[j], coordinates[j + 1], 'X', color='blue', label="actual")
         if predicted_coordinates is not None:
-            plt.plot(predicted_coordinates[j], predicted_coordinates[j + 1], 'X', color='red')
-            plt.legend({'predicted', 'actual'})
+            plt.plot(predicted_coordinates[j], predicted_coordinates[j + 1], 'X', color='red', label="predicted")
+    plt.legend()
     if image_path is not None:
         plt.savefig(image_path)
+
+def visualize_random_predicted_images(my_model, batch, scaler, feature_name, image_path):
+
+    fig = plt.figure(figsize=(30, 30))
+
+    for i in range(12):
+        plt.subplot(6, 6, i + 1)
+        plt.xticks([])
+        plt.yticks([])
+        plt.grid(False)
+
+        j= np.random.randint(0,len(batch[0]))
+        plt.imshow(batch[0][j:j+1].reshape(96, 96, 1)[:,:,0], cmap='gray')
+
+        actual_y= batch[1][j:j+1][0]
+        actual_y = scaler.inverse_transform([actual_y])[0]
+        predicted_y = my_model.predict(batch[0][j:j+1])
+        predicted_y = scaler.inverse_transform(predicted_y)[0]
+
+        nbr_cols = len(actual_y)
+        for k in range(0, nbr_cols, 2):
+            plt.plot(actual_y[k], actual_y[k + 1], 'X', color='blue', label="actual")
+        for k in range(0, nbr_cols, 2):
+          plt.plot(predicted_y[k], predicted_y[k + 1], 'X', color='red',label="predicted")
+
+    plt.legend()
+    fig.suptitle("Trained {} feature model predictions on a mix of augmented and normal images from validation set".format(feature_name.upper()), fontweight='bold', fontsize=30)
+    fig.tight_layout()
+    fig.subplots_adjust(top=0.95)
+    fig.savefig(image_path, bbox_inches="tight")
+    plt.show()
