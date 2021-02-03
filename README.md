@@ -61,12 +61,10 @@ In **Part 1.4** we have used the trained models to fill the missing values and p
 
 Here are some examples for each feature after training its own model:
 <br>
-<p>
+
 <img style="float: right;"  src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/left_eye_center_augmented_results.png">
 <br>
 <img style="float: right;"  src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/left_eye_center_normal_results.png">
-</p>
-<br>
 
 <hr/>
 
@@ -97,7 +95,6 @@ Here are some examples for each feature after training its own model:
 <img style="float: right;"  src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eye_outer_corner_augmented_results.png">
 <br>
 <img style="float: right;"  src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eye_outer_corner_normal_results.png">
-<br>
 
 <hr/>
 
@@ -110,28 +107,26 @@ Here are some examples for each feature after training its own model:
 <img style="float: right;"  src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eyebrow_inner_end_augmented_results.png">
 <br>
 <img style="float: right;"  src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eyebrow_inner_end_normal_results.png">
-<br>
 
 <hr/>
 
 <img style="float: right;"  src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/left_eyebrow_outer_end_augmented_results.png">
 <br>
 <img style="float: right;"  src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/left_eyebrow_outer_end_normal_results.png">
-<br>
 
 <hr/>
 
 <img style="float: right;"  src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eyebrow_outer_end_augmented_results.png">
 <br>
 <img style="float: right;"  src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/right_eyebrow_outer_end_normal_results.png">
-<br>
+
 
 <hr/>
 
 <img style="float: right;"  src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/mouth_center_bottom_lip_augmented_results.png">
 <br>
 <img style="float: right;"  src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/mouth_center_bottom_lip_normal_results.png">
-<br>
+
 
 <hr/>
 
@@ -158,7 +153,7 @@ Here are some examples for each feature after training its own model:
 
 ##### Here's an example of all features after being filled.
 <br>
-<img style="float: right;"  src="https://github.com/mariaafara/face-landmark-detection/blob/part1/images/final_examples2.png">
+<img style="float: right;"  src="https://github.com/mariaafara/face-landmark-detection/blob/part2/images/final_examples2.png">
 
 ### Part 2
  This part is for building, training and testing the prediction model.
