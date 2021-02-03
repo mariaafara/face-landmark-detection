@@ -14,7 +14,7 @@ PATIENCE_EARLY_STOPPING = int(getenv("PATIENCE", 8))
 PATIENCE_LR = int(getenv("PATIENCE", 4))
 MODEL_PATH = getenv("MODEL_PATH", "models/prediction_model/model")  # .h5
 WEIGHT_PATH = getenv("WEIGHT_PATH", "models/prediction_model/model_weights.ckpt")
-IMAGE_SHAPE = tuple([int(i) for i in getenv("IMAGE_SHAPE", "96,96,3").split(",")])  #  ex: 96,96,3
+IMAGE_SHAPE = tuple([int(i) for i in getenv("IMAGE_SHAPE", "96,96,1").split(",")])  #  ex: 96,96,3
 BASE_MODEL_NAME = getenv("BASE_MODEL_NAME", 'VGG16')   # EfficientNetB0, InceptionV3, VGG16, VGG19
 FEATURES_DIMENSIONS = int(getenv("FEATURES_DIMENSIONS", 2))  # 2 or 30
 TRAINABLE = getenv("TRAINABLE", "false") == "true"

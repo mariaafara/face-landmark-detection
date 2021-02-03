@@ -10,8 +10,8 @@ class DataGenerator(tf.keras.utils.Sequence):
     It can handle any number of coordinates.
     """
 
-    def __init__(self, df, batch_size=32, rgb_channels=True,
-                 shuffle=True, augment=True, normalize_image=True,
+    def __init__(self, df, batch_size=32, rgb_channels=False,
+                 shuffle=False, augment=True, normalize_image=False,
                  normalize_coordinates=False, scaler=None):
         """
         Args:
