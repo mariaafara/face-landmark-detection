@@ -157,10 +157,8 @@ Here are some examples for each feature after training its own model:
 <hr/>
 
 <br>
-Here's an example of all features after being filled:
-
+Here's an example of all features after being filled.
 <br>
-
 <img align="left" src="https://github.com/mariaafara/face-landmark-detection/blob/part1/images/final_examples2.png">
 
 ### Part 2
