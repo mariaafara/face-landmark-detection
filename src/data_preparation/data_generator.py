@@ -89,13 +89,16 @@ class DataGenerator(tf.keras.utils.Sequence):
         if self.normalize_image:
             batched_images = batched_images / 255
 
-        batched_feature_coordinates = df_batch.iloc[:, :-1]
-        if self.normalize_coordinates:
-            batched_feature_coordinates = self.scaler.transform(batched_feature_coordinates.values)
+        if self.nb_features:
+            batched_feature_coordinates = df_batch.iloc[:, :-1]
+            if self.normalize_coordinates:
+                batched_feature_coordinates = self.scaler.transform(batched_feature_coordinates.values)
 
-        batched_feature_coordinates = batched_feature_coordinates.astype(np.float32)
+            batched_feature_coordinates = batched_feature_coordinates.astype(np.float32)
 
-        return batched_images, batched_feature_coordinates
+            return batched_images, batched_feature_coordinates
+
+        return batched_images
 
     def augmentor(self, df):
 
