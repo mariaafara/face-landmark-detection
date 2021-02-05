@@ -1,0 +1,3 @@
+FROM tensorflow/serving
+COPY model /models/face_keypoints_detection_model
+ENV MODEL_NAME=face_keypoints_detection_model
