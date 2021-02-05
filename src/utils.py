@@ -93,6 +93,7 @@ def visualize_image(image, coordinates, image_path=None, predicted_coordinates=N
     if image_path is not None:
         plt.savefig(image_path)
 
+
 def visualize_random_predicted_images(my_model, batch, scaler, feature_name=None, image_path=None, type_="augmented"):
 
     fig = plt.figure(figsize=(30, 30))
@@ -112,14 +113,16 @@ def visualize_random_predicted_images(my_model, batch, scaler, feature_name=None
 
         plt.imshow(batch[0][j:j+1].reshape(96, 96, 1)[:,:,0], cmap='gray')
 
-        actual_y= batch[1][j:j+1][0]
-        actual_y = scaler.inverse_transform([actual_y])[0]
         predicted_y = my_model.predict(batch[0][j:j+1])
         predicted_y = scaler.inverse_transform(predicted_y)[0]
 
-        nbr_cols = len(actual_y)
+        nbr_cols = len(predicted_y)
+
+        actual_y = batch[1][j:j + 1][0]
+        actual_y = scaler.inverse_transform([actual_y])[0]
         for k in range(0, nbr_cols, 2):
             plt.plot(actual_y[k], actual_y[k + 1], 'X', color='blue')
+
         for k in range(0, nbr_cols, 2):
             plt.plot(predicted_y[k], predicted_y[k + 1], 'X', color='red')
 
